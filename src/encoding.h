@@ -1,5 +1,6 @@
 #ifndef ENCODING_H
 #define ENCODING_H
+ 
 
 /**
  * @file encoding.h
@@ -93,7 +94,7 @@ char *decode_4b5b(const char *encoded);
  * @param encoded Señal codificada
  * @param filename Archivo donde guardar el diagrama
  */
-void plot_signal(const char *encoded, const char *filename);
+void plot_signal(const char *encoded, const char *filename,const char *title);
 
 // ============================================
 // Simulación de ruido
