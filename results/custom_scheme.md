@@ -195,17 +195,7 @@ LHHHHLLLLLHL
 ```
 
 ### Diagrama de señal
-```
-Tiempo:    0   1   2   3   4   5   6   7   8   9  10  11
-Entrada:   1   1   0   1   0   0   1   0
-Salida:    L   H   H   H   H   L   L   L   L   L   H   L
-
-       H   ─────────────
-           │           │
-       L   ─           ─────────────────   ─
-           └───────────┘                 └─┘
-```
-
+En el archivo signals.txt
 ---
 
 ## Comparación con Otros Esquemas
@@ -277,6 +267,3 @@ ZR-Code sería útil en:
 
 ---
 
-**Implementado por:** Zain Rondon  
-**Fecha:** 2025-12-08  
-**Versión:** 1.0
