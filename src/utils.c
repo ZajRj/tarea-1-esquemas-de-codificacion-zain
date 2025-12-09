@@ -89,7 +89,7 @@ void plot_signal_header(const char *encoded,FILE *file, const char *title)
     size_t len = strlen(encoded);
 
     // Encabezado y bits 
-    fprintf(file, "## Diagrama ASCII de Señal %s ('H' = HIGH, 'L' = LOW) ##\n", title);
+    fprintf(file, "## Diagrama ASCII de Señal %s ##\n", title);
     fprintf(file, "Bits:    ");
 
     for (size_t i = 0; i < len; i++)
@@ -123,7 +123,7 @@ void plot_signal_high(const char *encoded, FILE *file)
         else
             fprintf(file, " ");
 
-        if (current_level == HIGH)
+        if (current_level == HIGH || current_level == '1')
             fprintf(file, "¯¯¯");
 
         else
@@ -158,7 +158,7 @@ void plot_signal_low(const char *encoded, FILE *file)
             fprintf(file, " ");
 
         // Dibuja el nivel horizontal
-        if (current_level == LOW)
+        if (current_level == LOW || current_level == '0')
             fprintf(file, "___");
 
         else

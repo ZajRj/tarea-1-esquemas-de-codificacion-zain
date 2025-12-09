@@ -94,7 +94,8 @@ char *decode_4b5b(const char *encoded);
  * @param encoded Señal codificada
  * @param filename Archivo donde guardar el diagrama
  */
-void plot_signal(const char *encoded, const char *filename,const char *title);
+void plot_signal(const char *title,const char *encoded, const char *filename);
+
 
 // ============================================
 // Simulación de ruido
