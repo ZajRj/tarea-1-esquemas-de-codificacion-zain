@@ -107,6 +107,33 @@ void plot_signal(const char *title,const char *encoded, const char *filename);
  * @param ber Bit Error Rate (probabilidad de error por bit, ej: 0.02 = 2%)
  */
 void add_noise(char *bitstream, double ber);
+// ============================================
+// Simulación de ruido
+// ============================================
+
+/**
+ * @brief Introduce errores aleatorios en el bitstream
+ * @param bitstream Cadena de bits a modificar (se modifica in-place)
+ * @param ber Bit Error Rate (probabilidad de error por bit, ej: 0.02 = 2%)
+ */
+void add_noise(char *bitstream, double ber);
+
+// ============================================
+// Esquema Personalizado: ZR-Code (Zain Rondon Code)
+// ============================================
+
+/**
+ * @brief Codifica un bitstream usando ZR-Code (2B/3B)
+ * @param bitstream Cadena de bits ('0' y '1')
+ * @return Cadena codificada (memoria dinámica, debe liberarse con free)
+ */
+char *encode_custom(const char *bitstream);
+
+/**
+ * @brief Decodifica una señal ZR-Code
+ * @param encoded Señal codificada
+ * @return Bitstream original (memoria dinámica, debe liberarse con free)
+ */
+char *decode_custom(const char *encoded);
 
 #endif // ENCODING_H
-

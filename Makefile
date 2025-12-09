@@ -29,7 +29,7 @@ all: setup $(TEST_BIN)
 
 $(TEST_BIN): $(SRCS) $(TEST_SRC)
 	@mkdir -p $(BIN_DIR)
-	$(CC) $(CFLAGS) -o $(TEST_BIN) $(SRCS) $(TEST_SRC)
+	$(CC) $(CFLAGS) -o $(TEST_BIN) $(SRCS) $(SRC_DIR)/analysis.c $(TEST_SRC) -lm
 
 ##############################################
 # Pruebas automáticas

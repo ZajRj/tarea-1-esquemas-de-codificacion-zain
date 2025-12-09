@@ -1,8 +1,10 @@
 #include "encoding.h"
+#include "analysis.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 
 // Función auxiliar para comparar strings de bits
@@ -55,18 +57,30 @@ int main(void) {
     test_equal("4B/5B encode/decode", bitstream_4b, dec_4b5b);
     plot_signal("4B/5B",enc_4b5b, "results/signals.txt");
     
+    // ZR-Code (Esquema Personalizado)
+    const char *bitstream_custom = "11010010"; // multiplo de 2 bits
+    
+    char *enc_custom = encode_custom(bitstream_custom);
+    char *dec_custom = decode_custom(enc_custom);
+
+    test_equal("ZR-Code encode/decode", bitstream_custom, dec_custom);
+    plot_signal("ZR-Code (Custom)",enc_custom, "results/signals.txt");
 
     free(enc_nrz);
     free(dec_nrz);
     free(enc_nrzi);
     free(dec_nrzi);
     free(enc_man);
-    free(dec_man);
-    free(enc_4b5b);
-    free(dec_4b5b);
-
-    
+    free(enc_custom);
+    free(dec_custom);
 
     printf("🎉 Todas las pruebas automáticas pasaron correctamente.\n");
+    
+    // ============================================
+    // PARTE B: ANÁLISIS CUANTITATIVO
+    // ============================================
+    srand(time(NULL));  // Inicializar generador aleatorio
+    run_all_analysis(0.08);
+    
     return 0;
 }

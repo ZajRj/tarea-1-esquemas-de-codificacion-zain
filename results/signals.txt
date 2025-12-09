@@ -1,0 +1,25 @@
+## Diagrama ASCII de Señal NRZ ##
+Bits:    H   H   L   L   H   L   
+Nivel H:  ¯¯¯ ¯¯¯|       |¯¯¯|   
+Nivel L:         |___ ___|   |___
+
+## Diagrama ASCII de Señal NRZI ##
+Bits:    H   L   L   L   H   H   
+Nivel H:  ¯¯¯|           |¯¯¯ ¯¯¯
+Nivel L:     |___ ___ ___|       
+
+## Diagrama ASCII de Señal Manchester ##
+Bits:    H   L   H   L   L   H   L   H   H   L   L   H   
+Nivel H:  ¯¯¯|   |¯¯¯|       |¯¯¯|   |¯¯¯ ¯¯¯|       |¯¯¯
+Nivel L:     |___|   |___ ___|   |___|       |___ ___|   
+
+## Diagrama ASCII de Señal 4B/5B ##
+Bits:    1   0   1   1   0   1   1   1   0   1   1   1   1   1   0   
+Nivel H:  ¯¯¯|   |¯¯¯ ¯¯¯|   |¯¯¯ ¯¯¯ ¯¯¯|   |¯¯¯ ¯¯¯ ¯¯¯ ¯¯¯ ¯¯¯|   
+Nivel L:     |___|       |___|           |___|                   |___
+
+## Diagrama ASCII de Señal ZR-Code (Custom) ##
+Bits:    L   H   H   H   H   L   L   L   L   L   H   L   
+Nivel H:     |¯¯¯ ¯¯¯ ¯¯¯ ¯¯¯|                   |¯¯¯|   
+Nivel L:  ___|               |___ ___ ___ ___ ___|   |___
+

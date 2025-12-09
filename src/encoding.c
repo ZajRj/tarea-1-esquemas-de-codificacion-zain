@@ -432,3 +432,136 @@ void add_noise(char *bitstream, double ber)
         }
     }
 }
+// ============================================
+// Esquema Personalizado: ZR-Code (Zain Rondon Code)
+// Codificacion 2B/3B con resistencia a inversion de polaridad
+// ============================================
+
+// Tablas de codificacion 2B/3B
+static const char *ZR_TABLE_LOW[4] = {
+    "LLL",  // 00: sin transiciones
+    "LLH",  // 01: 1 transicion
+    "LHL",  // 10: 2 transiciones
+    "LHH"   // 11: 1 transicion
+};
+
+static const char *ZR_TABLE_HIGH[4] = {
+    "HHH",  // 00: sin transiciones
+    "HHL",  // 01: 1 transicion
+    "HLH",  // 10: 2 transiciones
+    "HLL"   // 11: 1 transicion
+};
+
+char *encode_custom(const char *bitstream)
+{
+    if (bitstream == NULL)
+        return NULL;
+
+    size_t len = strlen(bitstream);
+    size_t adjusted_len = (len % 2 == 0) ? len : len + 1;
+    size_t num_pairs = adjusted_len / 2;
+
+    char *encoded = malloc_string(bitstream, num_pairs * 3, "encode_custom");
+    if (encoded == NULL)
+    {
+        perror("Fallo en asignacion de memoria para encode_custom");
+        return NULL;
+    }
+
+    char last_level = LOW;
+    size_t out_pos = 0;
+
+    for (size_t i = 0; i < adjusted_len; i += 2)
+    {
+        char bit1 = (i < len) ? bitstream[i] : '0';
+        char bit2 = (i + 1 < len) ? bitstream[i + 1] : '0';
+
+        if ((bit1 != '0' && bit1 != '1') || (bit2 != '0' && bit2 != '1'))
+        {
+            fprintf(stderr, "Error: Caracter no valido: %c%c\n", bit1, bit2);
+            free(encoded);
+            return NULL;
+        }
+
+        int index = ((bit1 - '0') << 1) | (bit2 - '0');
+        const char *pattern = (last_level == LOW) ? ZR_TABLE_LOW[index] : ZR_TABLE_HIGH[index];
+
+        encoded[out_pos++] = pattern[0];
+        encoded[out_pos++] = pattern[1];
+        encoded[out_pos++] = pattern[2];
+
+        last_level = pattern[2];
+    }
+
+    encoded[out_pos] = '\0';
+    return encoded;
+}
+
+char *decode_custom(const char *encoded)
+{
+    if (encoded == NULL)
+        return NULL;
+
+    size_t len = strlen(encoded);
+    if (len % 3 != 0)
+    {
+        fprintf(stderr, "Error: Longitud debe ser multiplo de 3\n");
+        return NULL;
+    }
+
+    size_t num_blocks = len / 3;
+    size_t bitstream_len = num_blocks * 2;
+
+    char *bitstream = malloc_string(encoded, bitstream_len, "decode_custom");
+    if (bitstream == NULL)
+    {
+        perror("Fallo en asignacion de memoria para decode_custom");
+        return NULL;
+    }
+
+    char last_level = LOW;
+    size_t bit_pos = 0;
+
+    for (size_t i = 0; i < num_blocks; i++)
+    {
+        char s1 = encoded[i * 3];
+        char s2 = encoded[i * 3 + 1];
+        char s3 = encoded[i * 3 + 2];
+
+        if ((s1 != HIGH && s1 != LOW) || (s2 != HIGH && s2 != LOW) || (s3 != HIGH && s3 != LOW))
+        {
+            fprintf(stderr, "Error: Caracter no valido: %c%c%c\n", s1, s2, s3);
+            free(bitstream);
+            return NULL;
+        }
+
+        int found = 0;
+        int decoded_value = -1;
+        const char **table = (last_level == LOW) ? ZR_TABLE_LOW : ZR_TABLE_HIGH;
+
+        for (int j = 0; j < 4; j++)
+        {
+            if (s1 == table[j][0] && s2 == table[j][1] && s3 == table[j][2])
+            {
+                decoded_value = j;
+                found = 1;
+                break;
+            }
+        }
+
+        if (!found)
+        {
+            fprintf(stderr, "Error: Patron no valido: %c%c%c\n", s1, s2, s3);
+            free(bitstream);
+            return NULL;
+        }
+
+        bitstream[bit_pos++] = ((decoded_value & 0x02) >> 1) + '0';
+        bitstream[bit_pos++] = (decoded_value & 0x01) + '0';
+
+        last_level = s3;
+    }
+
+    bitstream[bit_pos] = '\0';
+    return bitstream;
+}
